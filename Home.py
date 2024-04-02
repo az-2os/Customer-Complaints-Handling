@@ -7,10 +7,7 @@ import plotly.express as px
 from cfpb_api_client import CFPBApiClient
 
 # Load environment variables
-from dotenv import load_dotenv
 import os
-load_dotenv()
-
 
 # Constant
 COMPLAINT_SUMMARIZATION_PROMPT = """\
