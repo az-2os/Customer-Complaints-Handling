@@ -84,6 +84,7 @@ def cleanup_narratives(series: pd.Series) -> pd.Series:
     return series.str.replace(pattern, replacement, regex=True)
 
 
+@st.cache_resource
 def fetch_data(client: CFPBApiClient, **kwargs) -> pd.DataFrame:
     """
     Fetch data from the CFPB API and return it as a DataFrame with cleaned narratives and capped length (500 chars).
@@ -135,6 +136,7 @@ def fetch_data(client: CFPBApiClient, **kwargs) -> pd.DataFrame:
     return df_result
 
 
+@st.cache_resource
 def summarize(api_key: str, model: str, df_in: pd.DataFrame) -> str:
     # Preprocess df
     # Sort the df
