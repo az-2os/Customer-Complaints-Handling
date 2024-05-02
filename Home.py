@@ -7,7 +7,10 @@ import plotly.express as px
 from cfpb_api_client import CFPBApiClient
 
 # Load environment variables
+from dotenv import load_dotenv
 import os
+load_dotenv()
+
 
 # Constant
 COMPLAINT_SUMMARIZATION_PROMPT = """\
@@ -49,7 +52,7 @@ DEFAULT_SUMMARY ="""\
 ### Conclusion
 The complaints suggest that JPMORGAN CHASE & CO. could improve in areas related to handling overdraft fees, system glitches affecting account transactions and closures, clarity and efficiency in dispute resolutions, and support for fraud and scam victims. Addressing these issues could potentially reduce the volume of similar complaints and improve overall customer satisfaction."""
 
-LLM_MODEL_OPTIONS = ["gpt-3.5-turbo-0125", "gpt-3.5-turbo"]
+LLM_MODEL_OPTIONS = ["gpt-3.5-turbo"]
 
 #############
 #   SETUP   #
@@ -84,7 +87,6 @@ def cleanup_narratives(series: pd.Series) -> pd.Series:
     return series.str.replace(pattern, replacement, regex=True)
 
 
-@st.cache_resource
 def fetch_data(client: CFPBApiClient, **kwargs) -> pd.DataFrame:
     """
     Fetch data from the CFPB API and return it as a DataFrame with cleaned narratives and capped length (500 chars).
@@ -136,7 +138,6 @@ def fetch_data(client: CFPBApiClient, **kwargs) -> pd.DataFrame:
     return df_result
 
 
-@st.cache_resource
 def summarize(api_key: str, model: str, df_in: pd.DataFrame) -> str:
     # Preprocess df
     # Sort the df
@@ -217,25 +218,25 @@ if st.sidebar.button("Generate Summary", disabled=disable_generate):
 # MAIN PAGE #
 #############
 st.title("Gen AI for Handling Customer Complaints")
-st.write("""\
-This demo showcases the application of Generative AI (Gen AI) in managing customer complaints,
-- The example complaint data is live from the Consumer Financial Protection Bureau (CFPB).
-- With the example data, Gen AI can then be used to summarize the complaints and provide specific insights into the data. (In its
-    current state, the demo only supports OpenAI API, but it is fairly easy to extend it to other APIs.)
+# st.write("""\
+# This demo showcases the application of Generative AI (Gen AI) in managing customer complaints,
+# - The example complaint data is live from the Consumer Financial Protection Bureau (CFPB).
+# - With the example data, Gen AI can then be used to summarize the complaints and provide specific insights into the data. (In its
+#     current state, the demo only supports OpenAI API, but it is fairly easy to extend it to other APIs.)
 
-To reduce cost, the data is preprocessed to minimize the amount of tokens sent to the model. The more results you fetch, the more
-cost you will incur. So be mindful when choosing the number of results. We also recommend using monitoring tools to keep track of
-token usage and leverage optimizations techniques like caching.
+# To reduce cost, the data is preprocessed to minimize the amount of tokens sent to the model. The more results you fetch, the more
+# cost you will incur. So be mindful when choosing the number of results. We also recommend using monitoring tools to keep track of
+# token usage and leverage optimizations techniques like caching.
 
-While not shown in this demo, we have also experimented with using Gen AI for other tasks like:
-1. Simplifying feedback collection and self-triage for customer support
-2. Generating starter responses to customer complaints which unlocks efficiency gain
-3. Automatic visualization of data using natural language which democratizes data analysis for non-technical users and stakeholders
+# While not shown in this demo, we have also experimented with using Gen AI for other tasks like:
+# 1. Simplifying feedback collection and self-triage for customer support
+# 2. Generating starter responses to customer complaints which unlocks efficiency gain
+# 3. Automatic visualization of data using natural language which democratizes data analysis for non-technical users and stakeholders
 
-While some of these applications might not be relevant using the data shown here, the similar techniques can be applied to other 
-unstructured or private data, to modernize data collection and streamline customer support and data analysis workflows.  We hope
-you find this demo helpful and inspiring for your own projects.\
-""")
+# While some of these applications might not be relevant using the data shown here, the similar techniques can be applied to other 
+# unstructured or private data, to modernize data collection and streamline customer support and data analysis workflows.  We hope
+# you find this demo helpful and inspiring for your own projects.\
+# """)
 
 # Display the search results if there are any
 if st.session_state['search_results'] is not None:
