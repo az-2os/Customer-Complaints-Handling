@@ -5,6 +5,7 @@ from openai import OpenAI
 import datetime
 import plotly.express as px
 from cfpb_api_client import CFPBApiClient
+import os
 
 
 # Constant
