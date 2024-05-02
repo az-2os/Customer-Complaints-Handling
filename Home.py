@@ -146,7 +146,8 @@ def summarize(api_key: str, model: str, df_in: pd.DataFrame) -> str:
         api_key=api_key,
         base_url='https://oai.hconeai.com/v1',
         default_headers={ # Helicone monitoring layer
-            "Helicone-Auth": f"Bearer {os.getenv('HELICONE_API_KEY')}"
+            "Helicone-Auth": f"Bearer {os.getenv('HELICONE_API_KEY')}",
+            "Helicone-User-Id": "cfpb-complaints-public-demo"
         },
     )
     response = client.chat.completions.create(
